@@ -16,6 +16,9 @@ export default {
         "gray-m": "#FAFAFA",
         gray: "#1111117A",
       },
+      padding: {
+        "2,5": "0.625rem",
+      },
     },
   },
   plugins: [],

@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
 }
 
 .my-input .label {
-  @apply absolute bottom-2 left-4 text-sm text-gray translate-y-0 transition-all pointer-events-none;
+  @apply absolute bottom-[17px] left-4 text-sm text-gray translate-y-0 transition-all pointer-events-none;
 }
 
 .my-input .focus-bg {
