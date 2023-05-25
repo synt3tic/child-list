@@ -4,7 +4,13 @@ import MyHeader from "./components/MyHeader/MyHeader.vue";
 
 <template>
   <MyHeader />
-  <router-view />
+  <main class="main">
+    <router-view />
+  </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.main {
+  @apply flex justify-center w-full py-7;
+}
+</style>

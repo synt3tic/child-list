@@ -4,11 +4,22 @@ import { Props } from "./types";
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
 });
+const emit = defineEmits(["updateValue"]);
+
+const updateValue = (e: Event) => {
+  emit("updateValue", e.target.value);
+};
 </script>
 
 <template>
   <label for="input" class="my-input">
-    <input type="text" id="input" placeholder="&nbsp;" />
+    <input
+      type="text"
+      id="input"
+      placeholder="&nbsp;"
+      :value="props.value"
+      @change="updateValue"
+    />
     <span class="label">{{ props.label }}</span>
     <span class="focus-bg"></span>
   </label>

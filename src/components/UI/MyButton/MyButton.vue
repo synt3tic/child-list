@@ -16,7 +16,7 @@ const classList = computed(() => {
 </script>
 
 <template>
-  <button :class="classList">
+  <button :class="classList" :disabled="props.disabled">
     <slot />
   </button>
 </template>
@@ -27,6 +27,7 @@ const classList = computed(() => {
 }
 
 .my-button_transparent {
-  @apply bg-transparent border-2 border-primary text-primary hover:bg-gray-l;
+  @apply bg-transparent border-2 border-primary text-primary hover:bg-gray-l disabled:bg-gray-l 
+  disabled:text-gray disabled:border-gray disabled:active:scale-100;
 }
 </style>
