@@ -1,7 +1,6 @@
-<script setup lang="ts"></script>
 <template>
   <header class="my-header">
-    <img src="../assets/icons/logo.svg" alt="logo" class="my-header__icon" />
+    <img src="../../assets/icons/logo.svg" alt="logo" class="my-header__icon" />
     <nav class="my-header__navigation">
       <router-link to="/" active-class="router-link-active">Форма</router-link>
       <router-link to="/preview" active-class="router-link-active"
