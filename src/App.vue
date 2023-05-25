@@ -1,11 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import MyHeader from "./components/MyHeader.vue";
+</script>
 
 <template>
-  <div class="flex gap-4">
-    <router-link to="/">FORM</router-link>
-    <router-link to="/preview">PREVIEW</router-link>
-    <router-view />
-  </div>
+  <MyHeader />
+  <router-view />
 </template>
 
 <style scoped></style>
