@@ -81,9 +81,7 @@ const saveResult = () => {
     </div>
     <div class="form__info">
       <div class="info__header">
-        <Transition name="slide-fade">
-          <h2 v-if="childrenInfo.length">Дети (макс. 5)</h2>
-        </Transition>
+        <h2>Дети (макс. 5)</h2>
         <MyButton
           variation="transparent"
           @click="addChild"
@@ -139,15 +137,8 @@ const saveResult = () => {
 }
 
 .notification-slide-enter-active,
-.notification-slide-leave-active,
-.slide-fade-enter-active,
-.slide-fade-leave-active {
+.notification-slide-leave-active {
   @apply transition-all;
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  @apply -translate-x-8 opacity-0;
 }
 
 .list-enter-active,
