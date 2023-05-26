@@ -1,19 +1,47 @@
 <script setup lang="ts">
 import MyButton from "../components/UI/MyButton/MyButton.vue";
 import InfoFields from "../components/InfoFields/InfoFields.vue";
-import { ref } from "vue";
-import { Info } from "../types/types";
+import { computed, onMounted, ref } from "vue";
+import { Info, InfoValue } from "../types/types";
+import { useInfoStore } from "../stores/InfoStore";
+import MyNotification from "../components/UI/MyNotification/MyNotification.vue";
+
+const store = useInfoStore();
 
 const personalInfo = ref<Info>({
   name: "",
   age: "",
 });
-const updatePersonalInfo = (value: string, newValue: string) => {
-  personalInfo.value[value] = newValue;
+const childrenInfo = ref<Info[]>([]);
+
+onMounted(() => {
+  personalInfo.value = Object.assign({}, store.personalInfo);
+  childrenInfo.value = Array.from(store.childrenInfo);
+});
+
+const isNotificationVisible = ref(false);
+const isValid = computed(() => {
+  const personalInvoValid = personalInfo.value.age && personalInfo.value.name;
+  const childrenInfoValid = childrenInfo.value.find((el) => el.age && el.name);
+  return !!(
+    (childrenInfoValid && personalInvoValid) ||
+    (!childrenInfo.value.length && personalInvoValid)
+  );
+});
+const notificationText = computed(() => {
+  return isValid.value ? "Данные сохранены" : "Не все поля заполнены";
+});
+const changeNotificationVisible = () => {
+  isNotificationVisible.value = true;
+  setTimeout(() => {
+    isNotificationVisible.value = false;
+  }, 1000);
 };
 
-const childrenInfo = ref<Info[]>([]);
-const updateChildrenInfo = (value: string, newValue: string, id: number) => {
+const updatePersonalInfo = (value: InfoValue, newValue: string) => {
+  personalInfo.value[value] = newValue;
+};
+const updateChildrenInfo = (value: InfoValue, newValue: string, id: number) => {
   childrenInfo.value.map((el) => {
     if (el.id === id) {
       el[value] = newValue;
@@ -32,6 +60,18 @@ const addChild = () => {
 const removeChild = (id: number) => {
   childrenInfo.value = childrenInfo.value.filter((el) => el.id !== id);
 };
+
+const saveResult = () => {
+  if (isValid.value) {
+    if (personalInfo.value.age && personalInfo.value.name) {
+      store.updatePersonalInfo(personalInfo.value);
+    }
+    store.updateChildrenInfo(childrenInfo.value);
+    changeNotificationVisible();
+  } else {
+    changeNotificationVisible();
+  }
+};
 </script>
 <template>
   <form class="form">
@@ -41,26 +81,40 @@ const removeChild = (id: number) => {
     </div>
     <div class="form__info">
       <div class="info__header">
-        <h2>Дети (макс. 5)</h2>
+        <Transition name="slide-fade">
+          <h2 v-if="childrenInfo.length">Дети (макс. 5)</h2>
+        </Transition>
         <MyButton
           variation="transparent"
           @click="addChild"
           :disabled="childrenInfo.length > 4"
         >
+          <img src="../assets/icons/add.svg" alt="add-icon" />
           Добавить ребёнка
         </MyButton>
       </div>
-      <InfoFields
-        v-for="item in childrenInfo"
-        :info="item"
-        :key="item.id"
-        variation="children"
-        @update-values="updateChildrenInfo"
-        @remove-child="removeChild"
-      />
+      <ul class="info__children-list">
+        <TransitionGroup name="list">
+          <InfoFields
+            v-for="item in childrenInfo"
+            :info="item"
+            :key="item.id"
+            variation="children"
+            @update-values="updateChildrenInfo"
+            @remove-child="removeChild"
+          />
+        </TransitionGroup>
+      </ul>
     </div>
-    <MyButton>Сохранить</MyButton>
+    <MyButton @click="saveResult">Сохранить</MyButton>
   </form>
+  <Transition name="notification-slide">
+    <MyNotification
+      v-if="isNotificationVisible"
+      :text="notificationText"
+      :is-error="!isValid"
+    />
+  </Transition>
 </template>
 
 <style scoped>
@@ -72,7 +126,41 @@ const removeChild = (id: number) => {
   @apply flex flex-col gap-5 w-full;
 }
 
+.form__info h2 {
+  @apply font-medium;
+}
+
 .info__header {
-  @apply flex justify-between;
+  @apply flex justify-between transition-all duration-1000;
+}
+
+.info__children-list {
+  @apply flex flex-col gap-2.5;
+}
+
+.notification-slide-enter-active,
+.notification-slide-leave-active,
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  @apply transition-all;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  @apply -translate-x-8 opacity-0;
+}
+
+.list-enter-active,
+.list-leave-active {
+  @apply transition-all;
+}
+.list-enter-from,
+.list-leave-to {
+  @apply -translate-x-8 opacity-0;
+}
+
+.notification-slide-enter-from,
+.notification-slide-leave-to {
+  @apply translate-y-8 opacity-0;
 }
 </style>

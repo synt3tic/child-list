@@ -3,20 +3,21 @@ import { Props } from "./types";
 
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
+  type: "text",
 });
 const emit = defineEmits(["updateValue"]);
 
 const updateValue = (e: Event) => {
-  emit("updateValue", e.target.value);
+  emit("updateValue", (e.target as HTMLInputElement).value);
 };
 </script>
 
 <template>
   <label for="input" class="my-input">
     <input
-      type="text"
       id="input"
       placeholder="&nbsp;"
+      :type="props.type"
       :value="props.value"
       @change="updateValue"
     />

@@ -1,6 +1,17 @@
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+</script>
+
 <template>
   <header class="my-header">
-    <img src="../../assets/icons/logo.svg" alt="logo" class="my-header__icon" />
+    <img
+      src="../../assets/icons/logo.svg"
+      alt="logo"
+      class="my-header__icon"
+      @click="router.push('/')"
+    />
     <nav class="my-header__navigation">
       <router-link to="/" active-class="router-link-active">Форма</router-link>
       <router-link to="/preview" active-class="router-link-active"
@@ -16,11 +27,11 @@
 }
 
 .my-header__icon {
-  @apply absolute left-6 top-6 cursor-pointer active:scale-95 transition-all;
+  @apply absolute md:left-6 top-6 cursor-pointer active:scale-95 transition-all;
 }
 
 .my-header__navigation {
-  @apply flex gap-6;
+  @apply flex gap-40 md:gap-6;
 }
 
 .my-header__navigation a {

@@ -23,11 +23,11 @@ const classList = computed(() => {
 
 <style scoped>
 .my-button {
-  @apply w-fit px-5 py-2.5 bg-primary rounded-full text-sm text-white transition-all hover:bg-primary-dark active:scale-95;
+  @apply flex gap-2 w-fit px-5 py-2.5 bg-primary rounded-full text-sm text-white transition-all 
+  hover:bg-primary-dark active:scale-95 disabled:bg-gray-l disabled:grayscale disabled:active:scale-100;
 }
 
 .my-button_transparent {
-  @apply bg-transparent border-2 border-primary text-primary hover:bg-gray-l disabled:bg-gray-l 
-  disabled:text-gray disabled:border-gray disabled:active:scale-100;
+  @apply bg-transparent border-2 border-primary text-primary hover:bg-gray-l;
 }
 </style>

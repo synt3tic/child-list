@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import MyInput from "../UI/MyInput/MyInput.vue";
-import { Info } from "../../types/types";
 import { Props } from "./types";
 
 const props = withDefaults(defineProps<Props>(), {
-  editable: false,
+  editable: true,
   variation: "personal",
 });
 const emit = defineEmits(["updateValues", "removeChild"]);
@@ -27,15 +26,30 @@ const classList = computed(() => {
     fields_children: props.variation === "children",
   };
 });
+
+const staticInfo = computed(() => {
+  const correctYear = (number: number, titles = ["год", "года", "лет"]) => {
+    const cases: number[] = [2, 0, 1, 1, 1, 2];
+    return titles[
+      number % 100 > 4 && number % 100 < 20
+        ? 2
+        : cases[number % 10 < 5 ? number % 10 : 5]
+    ];
+  };
+  return `${props.info.name}, ${props.info.age} ${correctYear(
+    +props.info.age
+  )}`;
+});
 </script>
 
 <template>
-  <fieldset :class="classList">
+  <fieldset v-if="props.editable" :class="classList">
     <MyInput :value="props.info.name" label="Имя" @update-value="updateName" />
     <MyInput
       :value="props.info.age"
       label="Возраст"
       @update-value="updateAge"
+      type="number"
     />
     <button
       v-if="props.variation === 'children'"
@@ -45,11 +59,18 @@ const classList = computed(() => {
       Удалить
     </button>
   </fieldset>
+  <div v-else class="fields_readonly">
+    {{ staticInfo }}
+  </div>
 </template>
 
 <style scoped>
 .fields {
   @apply flex flex-col gap-2.5;
+}
+
+.fields_readonly {
+  @apply w-fit px-5 py-2.5 bg-gray-l rounded;
 }
 
 .fields_children {

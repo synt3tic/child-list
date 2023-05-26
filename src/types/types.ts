@@ -3,3 +3,5 @@ export interface Info {
   name: string;
   age: string;
 }
+
+export type InfoValue = "name" | "age";
