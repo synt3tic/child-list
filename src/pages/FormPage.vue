@@ -22,7 +22,9 @@ onMounted(() => {
 const isNotificationVisible = ref(false);
 const isValid = computed(() => {
   const personalInvoValid = personalInfo.value.age && personalInfo.value.name;
-  const childrenInfoValid = childrenInfo.value.find((el) => el.age && el.name);
+  const childrenInfoValid = childrenInfo.value.filter(
+    (el) => el.age && el.name
+  );
   return !!(
     (childrenInfoValid && personalInvoValid) ||
     (!childrenInfo.value.length && personalInvoValid)
@@ -63,9 +65,7 @@ const removeChild = (id: number) => {
 
 const saveResult = () => {
   if (isValid.value) {
-    if (personalInfo.value.age && personalInfo.value.name) {
-      store.updatePersonalInfo(personalInfo.value);
-    }
+    store.updatePersonalInfo(personalInfo.value);
     store.updateChildrenInfo(childrenInfo.value);
     changeNotificationVisible();
   } else {
