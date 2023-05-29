@@ -6,8 +6,8 @@ import { Info } from "../types/types";
 
 const store = useInfoStore();
 
-const personalInfo = ref<Info>(store.personalInfo);
-const childrenInfo = ref<Info[]>(store.childrenInfo);
+const personalInfo = ref<Info>(store.myInfo);
+const childrenInfo = ref<Info[]>(store.kidsInfo);
 </script>
 <template>
   <div v-if="personalInfo.age || childrenInfo[0]" class="preview">
@@ -15,7 +15,7 @@ const childrenInfo = ref<Info[]>(store.childrenInfo);
       <h2>Персональные данные</h2>
       <InfoFields :info="personalInfo" :editable="false" />
     </div>
-    <div class="preview__info">
+    <div v-if="childrenInfo.length" class="preview__info">
       <div class="info__header">
         <h2>Дети</h2>
       </div>

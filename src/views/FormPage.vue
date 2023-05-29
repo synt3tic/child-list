@@ -15,25 +15,25 @@ const personalInfo = ref<Info>({
 const childrenInfo = ref<Info[]>([]);
 
 onMounted(() => {
-  personalInfo.value = Object.assign({}, store.personalInfo);
-  childrenInfo.value = Array.from(store.childrenInfo);
+  personalInfo.value = Object.assign({}, store.myInfo);
+  childrenInfo.value = Array.from(store.kidsInfo);
 });
 
 const isNotificationVisible = ref(false);
 const isValid = computed(() => {
   const personalInvoValid = personalInfo.value.age && personalInfo.value.name;
-  const childrenInfoValid = childrenInfo.value.filter(
-    (el) => el.age && el.name
+  const childrenInfoInvalid = childrenInfo.value.find(
+    (el) => !el.age || !el.name
   );
   return !!(
-    (childrenInfoValid && personalInvoValid) ||
+    (!childrenInfoInvalid && personalInvoValid) ||
     (!childrenInfo.value.length && personalInvoValid)
   );
 });
 const notificationText = computed(() => {
   return isValid.value ? "Данные сохранены" : "Не все поля заполнены";
 });
-const changeNotificationVisible = () => {
+const showNotification = () => {
   isNotificationVisible.value = true;
   setTimeout(() => {
     isNotificationVisible.value = false;
@@ -65,16 +65,16 @@ const removeChild = (id: number) => {
 
 const saveResult = () => {
   if (isValid.value) {
-    store.updatePersonalInfo(personalInfo.value);
-    store.updateChildrenInfo(childrenInfo.value);
-    changeNotificationVisible();
+    store.updateMyInfo(personalInfo.value);
+    store.updateKidsInfo(childrenInfo.value);
+    showNotification();
   } else {
-    changeNotificationVisible();
+    showNotification();
   }
 };
 </script>
 <template>
-  <form class="form">
+  <form class="form" @submit.prevent>
     <div class="form__info">
       <h2>Персональные данные</h2>
       <InfoFields :info="personalInfo" @update-values="updatePersonalInfo" />

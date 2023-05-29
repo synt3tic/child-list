@@ -4,8 +4,8 @@ import {
   createRouter,
   createWebHashHistory,
 } from "vue-router";
-import FormPage from "../pages/FormPage.vue";
-import PreviewPage from "../pages/PreviewPage.vue";
+import FormPage from "../views/FormPage.vue";
+import PreviewPage from "../views/PreviewPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   { path: "/", component: FormPage },

@@ -3,25 +3,25 @@ import { ref } from "vue";
 import { Info } from "../types/types";
 
 export const useInfoStore = defineStore("info", () => {
-  const personalInfo = ref<Info>({
+  const myInfo = ref<Info>({
     name: "",
     age: "",
   });
 
-  const childrenInfo = ref<Info[]>([]);
+  const kidsInfo = ref<Info[]>([]);
 
-  const updatePersonalInfo = (info: Info) => {
-    personalInfo.value = info;
+  const updateMyInfo = (info: Info) => {
+    myInfo.value = Object.assign(info);
   };
 
-  const updateChildrenInfo = (info: Info[]) => {
-    childrenInfo.value = info;
+  const updateKidsInfo = (info: Info[]) => {
+    kidsInfo.value = Array.from(info);
   };
 
   return {
-    personalInfo,
-    childrenInfo,
-    updatePersonalInfo,
-    updateChildrenInfo,
+    myInfo,
+    kidsInfo,
+    updateMyInfo,
+    updateKidsInfo,
   };
 });
